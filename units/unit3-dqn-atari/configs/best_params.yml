@@ -1,0 +1,16 @@
+SpaceInvadersNoFrameskip-v4:
+  batch_size: 8
+  env_wrapper:
+  - stable_baselines3.common.atari_wrappers.AtariWrapper
+  exploration_final_eps: 0.035319688295412675
+  exploration_fraction: 0.13195381053882643
+  frame_stack: 4
+  gamma: 0.9998634957636302
+  learning_rate: 0.00017341567515682135
+  n_timesteps: 200000
+  buffer_size: 100000
+  policy: CnnPolicy
+  policy_kwargs:
+    net_arch: [256]
+  target_update_interval: 26
+  train_freq: 1
