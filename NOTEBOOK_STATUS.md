@@ -1,6 +1,6 @@
 # Notebook status
 
-One row per notebook. Hygiene (output/metadata stripping) is in commit `4ebd8b2` and verified to leave every cell source
+One row per notebook. Hygiene (output/metadata stripping, with the notebooks added) is in commit `1eae918` and verified to leave every cell source
 unchanged (`scripts/strip_notebooks.py verify`). Code edits are separate commits, listed in the second column.
 
 Status values: **unchanged** (hygiene only), **smoke-tested** (ran locally with tiny budgets, no errors),
@@ -11,9 +11,9 @@ Status values: **unchanged** (hygiene only), **smoke-tested** (ran locally with 
 | `unit1-ppo-lunarlander/lunarlander.ipynb` | y: deleted the never-run `VecNormalize.load` continue-training cell | yes | smoke test passed, no cells skipped | smoke-tested |
 | `unit1-ppo-lunarlander/lunarlander_ppoipynb.ipynb` | n | yes | smoke test passed with cell 45 skipped (Hub download) | smoke-tested |
 | `train-hf-environment/training_Huggy.ipynb` | n | no: needs Unity ML-Agents Huggy binary | none, hygiene only | unchanged |
-| `unit2-q-learning/q_learning.ipynb` | y: `record_video` loop `while not (terminated or truncated)` (`a7c58ee`) | yes | smoke test passed with cell 85 skipped (downloads another user's model) | smoke-tested |
+| `unit2-q-learning/q_learning.ipynb` | y: `record_video` loop `while not (terminated or truncated)` (`3175bb9`) | yes | smoke test passed with cell 85 skipped (downloads another user's model) | smoke-tested |
 | `unit3-dqn-atari/atari_invaderts.ipynb` | n | no: Atari-scale training through `rl_zoo3` shell commands | none, hygiene only | unchanged |
-| `unit4-reinforce/reinforce_agent.ipynb` | y: `json.dupm` typo to `json.dump` (`14b1476`) and `default=int` for numpy ints (`c456604`) | yes | smoke test passed with cell 85 skipped (resumes from a local checkpoint) | smoke-tested |
+| `unit4-reinforce/reinforce_agent.ipynb` | y: `json.dupm` typo to `json.dump` (`41077e2`) and `default=int` for numpy ints (`9870b2b`) | yes | smoke test passed with cell 85 skipped (resumes from a local checkpoint) | smoke-tested |
 | `unit5-ml-agents/snowball_pyramid.ipynb` | n | no: Unity ML-Agents | none, hygiene only | unchanged |
 | `unit6-a2c-robotics/a2c_robot_training.ipynb` | n | no here: panda-gym needs numpy 2, this Mac's torch needs numpy < 2 (`numpy.long` error) | none, hygiene only | unchanged |
 | `unit7-multi-agent/ai_vs_ai.ipynb` | n | no: Unity ML-Agents SoccerTwos | none, hygiene only | unchanged |
