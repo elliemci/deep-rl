@@ -21,9 +21,9 @@ cp_to unit3-dqn-atari                     deep_q_learning/atari_invaderts.ipynb
 mkdir -p "$DST/unit3-dqn-atari/configs"
 for f in dqn.yml dqn_0.yml best_params.yml; do cp -p "$SRC/deep_q_learning/$f" "$DST/unit3-dqn-atari/configs/"; done
 cp_to unit4-reinforce                     policy_gradient/reinforce_agent.ipynb
-cp_to unit5-ml-agents                     unity_ml_agents/snowball_pyramid.ipynb
+cp_to unit5-ml-agents                     unity_ml_agents/snowball_pyramid.ipynb marl_ml_agents/snowball_target.ipynb
 cp_to unit6-a2c-robotics                  actor_critics/a2c_robot_training.ipynb
-cp_to unit7-multi-agent                   marl_ml_agents/ai_vs_ai.ipynb marl_ml_agents/snowball_target.ipynb
+cp_to unit7-multi-agent                   marl_ml_agents/ai_vs_ai.ipynb
 cp_to unit8a-ppo-from-scratch             ppo_CleanRL/ppo.py ppo_CleanRL/ppo_implementation.ipynb ppo_CleanRL/model_card_ppo-LunarLander-v1.md
 cp_to unit8b-sample-factory-vizdoom       async_ppo_SampleFactory/vizDoom.ipynb
 for e in doom_health_gathering_supreme_experiment deadly_corridor_experiment; do
