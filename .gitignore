@@ -1,0 +1,42 @@
+# --- model weights / checkpoints / pickles ---
+*.zip
+*.pt
+*.pth
+*.pkl
+models/
+checkpoints/
+checkpoint_p0/
+
+# --- training output / experiment tracking ---
+runs/
+wandb/
+logs/
+hub/
+rl_trained/
+*.monitor.csv
+*.db
+*.sqlite3
+optuna_*.pkl
+
+# --- media: videos ignored; GIF previews are tracked only in assets/gifs/ ---
+videos/
+video/
+*.mp4
+*.gif
+!assets/gifs/*.gif
+
+# --- vendored / generated / large ---
+ml-agents/
+PyGame-Learning-Environment/
+installer.sh
+_vizdoom/
+_vizdoom.ini
+
+# --- python / jupyter / env / OS ---
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.venv/
+venv/
+.env
+.DS_Store
