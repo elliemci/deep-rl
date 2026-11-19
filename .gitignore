@@ -40,3 +40,7 @@ __pycache__/
 venv/
 .env
 .DS_Store
+
+# --- screen recordings of Unity agents (inputs for make_gifs.sh) and temp downloads ---
+recordings/
+.cache/
