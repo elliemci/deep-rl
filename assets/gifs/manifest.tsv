@@ -1,0 +1,13 @@
+agent	source	start_s	gif_s	size_kb	settings
+q-FrozenLake-v1-4x4-noSlippery	HF	0	7.0	91	1fps 320px 256c
+q-Taxi-v3-noRainy	HF	6.00	7.0	62	1fps 320px 256c
+ppo-LunarLander-v2	HF	3.02	7.0	67	10fps 320px 256c
+ppo-LunarLander-v3	HF	0.44	7.0	71	10fps 320px 256c
+dqn-SpaceInvadersNoFrameskip-v4	HF	63.27	7.0	1398	10fps 320px 256c
+Reinforce-CartPole	HF	3.90	7.0	98	10fps 320px 256c
+Reinforce-PixelCopter	HF	3.50	7.0	505	10fps 320px 256c
+a2c-PandaReachDense-v3	HF	4.52	7.0	246	10fps 320px 256c
+a2c-PandaPickAndPlace-v3	HF	7.84	7.0	271	10fps 320px 256c
+ppo-LunarLander-v1	HF	6.37	7.0	61	10fps 320px 256c
+doom_health_gathering_supreme	HF	196.26	7.0	1124	6fps 256px 128c
+deadly_corridor_experiment	HF	34.46	7.0	1094	6fps 256px 128c
