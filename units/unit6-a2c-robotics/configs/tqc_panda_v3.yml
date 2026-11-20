@@ -1,0 +1,25 @@
+# RL-Zoo hyperparameters for TQC + HER on panda-gym v3 (gymnasium).
+#
+# Source: DLR-RM/rl-baselines3-zoo, hyperparams/tqc.yml (v2.9.2). The Zoo has NO
+# PandaPickAndPlace-v3 entry; its Panda entries are the old "-v1" ids (panda-gym 1.x,
+# gym API). PandaPickAndPlace-v1 there is just `<<: *her-defaults`, the shared
+# Fetch-robot HER defaults. This file copies those defaults verbatim under the v3 id,
+# so the only change from the Zoo is the environment id.
+#
+# Override notes (none of these change the Zoo values):
+#   - n_timesteps can be overridden from the command line with `-n`.
+#   - `normalize` is left off, like the Zoo's Fetch/PickAndPlace defaults.
+PandaPickAndPlace-v3:
+  n_timesteps: !!float 1e6
+  policy: 'MultiInputPolicy'
+  buffer_size: 1000000
+  batch_size: 2048
+  gamma: 0.95
+  learning_rate: !!float 1e-3
+  tau: 0.05
+  replay_buffer_class: HerReplayBuffer
+  replay_buffer_kwargs: "dict(
+    goal_selection_strategy='future',
+    n_sampled_goal=4,
+  )"
+  policy_kwargs: "dict(net_arch=[512, 512, 512], n_critics=2)"
