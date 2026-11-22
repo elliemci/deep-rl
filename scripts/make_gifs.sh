@@ -27,6 +27,7 @@ AGENTS=(
   "Reinforce-PixelCopter|replay.mp4|policy_gradient/replay_seed123.mp4"
   "a2c-PandaReachDense-v3|replay.mp4|actor_critics/videos/a2c-PandaReachDense-v3-replay-step-0-to-step-500.mp4"
   "a2c-PandaPickAndPlace-v3|replay.mp4|actor_critics/videos/a2c-PandaPickAndPlace-v3-replay-step-0-to-step-500.mp4"
+  "tqc-PandaPickAndPlace-v3|replay.mp4|-"
   "ppo-LunarLander-v1|replay.mp4|-"
   "doom_health_gathering_supreme|replay.mp4|-"
   "deadly_corridor_experiment|replay.mp4|-"

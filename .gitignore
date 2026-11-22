@@ -44,3 +44,9 @@ venv/
 # --- screen recordings of Unity agents (inputs for make_gifs.sh) and temp downloads ---
 recordings/
 .cache/
+
+# --- RL-Zoo / TQC+HER run folders: checkpoints, replay buffers, TensorBoard (live on Drive, never in git) ---
+tqc_her_runs/
+rl_model_*
+replay_buffer*
+offsets.json
