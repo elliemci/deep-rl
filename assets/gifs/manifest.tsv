@@ -11,3 +11,4 @@ a2c-PandaPickAndPlace-v3	HF	7.84	7.0	271	10fps 320px 256c
 ppo-LunarLander-v1	HF	6.37	7.0	61	10fps 320px 256c
 doom_health_gathering_supreme	HF	196.26	7.0	1124	6fps 256px 128c
 deadly_corridor_experiment	HF	34.46	7.0	1094	6fps 256px 128c
+tqc-PandaPickAndPlace-v3	HF	32.44	7.0	246	10fps 320px 256c
