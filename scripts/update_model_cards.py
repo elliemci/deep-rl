@@ -4,8 +4,9 @@
     python scripts/update_model_cards.py tqc-PandaPickAndPlace-v3            # print diff + files, change nothing
     python scripts/update_model_cards.py tqc-PandaPickAndPlace-v3 --push     # really upload (needs a write token)
 
-Only models listed in CARDS are supported. The current card is read from the public repo (no token needed for a
-dry run). Existing YAML tags/metadata are kept; the `model-index` metrics are replaced by the values below.
+Only models listed in CARDS are supported. The card is REBUILT FROM SCRATCH (YAML header and text), because
+`huggingface_sb3.package_to_hub` / `rl_zoo3.push_to_hub` overwrite README.md with a generic card every time they run.
+The current Hub card is only read to print the diff (no token needed for a dry run). Run this after every model push.
 `--push` uses the token from `huggingface-cli login` / HF_TOKEN and uploads, in ONE commit: README.md and the
 extra files listed per card. It changes a public page, so look at the dry run first.
 """
@@ -33,30 +34,32 @@ A [TQC](https://arxiv.org/abs/2005.04269) agent with [Hindsight Experience Repla
 [RL-Zoo](https://github.com/DLR-RM/rl-baselines3-zoo) on the sparse-reward robot task
 [`PandaPickAndPlace-v3`](https://panda-gym.readthedocs.io/) (panda-gym 3, gymnasium).
 It is a "beyond the course" follow-up to Unit 6 of the Hugging Face Deep RL Course, where an A2C agent never learned this task.
-**The task is not solved:** the agent succeeds in about a third of the episodes.
+**The task is not solved:** after 2M steps the agent succeeds in a bit under half of the episodes.
 
 ## Results
 
-100 evaluation episodes, deterministic actions, same evaluation seed for both agents, after 1M training steps (seed 0).
-Success is `info["is_success"]` on the last step of the episode.
+Deterministic actions, evaluation seed fixed, seed 0 for training. Success is `info["is_success"]` on the last step of the episode.
+The published model is the run after **2,000,000 training steps** (resumed from checkpoints after disconnects), evaluated on **500 episodes**:
+**44.2% success, mean reward -30.86 +/- 21.70** (95% interval on the success rate about +/- 4.4 points).
 
-| agent | training | success rate | mean reward +/- std | mean episode length |
+| agent | steps | evaluation episodes | success rate | mean reward +/- std |
 |---|---|---|---|---|
-| [A2C (Unit 6)](https://huggingface.co/elliemci/a2c-PandaPickAndPlace-v3) | on-policy, VecNormalize | 5% | -47.69 +/- 10.21 | 47.7 |
-| **TQC + HER (this model)** | off-policy, HER future x4 | **36%** | **-34.08 +/- 21.30** | 34.4 |
+| [A2C (Unit 6)](https://huggingface.co/elliemci/a2c-PandaPickAndPlace-v3) | ~1M | 100 | 5% | -47.69 +/- 10.21 |
+| TQC + HER (earlier checkpoint of this run) | 1M | 100 | 36% | -34.08 +/- 21.30 |
+| **TQC + HER (this model)** | **2M** | **500** | **44.2%** | **-30.86 +/- 21.70** |
 
-One seed and 100 episodes: roughly a +/- 9 point 95% interval on the 36%. The A2C 5% is probably episodes where the target spawns next to the cube
-(not verified).
+The rows use different numbers of evaluation episodes, so compare them loosely. The A2C 5% is probably episodes where the target spawns next to the cube (not verified).
+`results.json` in this repo is the 10-episode check that `package_to_hub` runs when uploading, not these numbers.
 
-![evaluation success during training](eval_curve.png)
+![evaluation success during the first 1M steps](eval_curve.png)
 
-Success rate over 20 evaluation episodes every 50k steps (noisy). The last two points (950k, 1M) come from a run resumed from a checkpoint.
+Success rate over 20 evaluation episodes every 50k steps during the first 1M steps (noisy). The last two points (950k, 1M) come from a resumed run. The 1M to 2M part is not plotted.
 
 ## Training
 
 * Hyperparameters: RL-Zoo `tqc.yml` "her-defaults" (the entry used by `PandaPickAndPlace-v1` there), registered unchanged under the v3 id:
   `MultiInputPolicy`, `HerReplayBuffer(goal_selection_strategy="future", n_sampled_goal=4)`, buffer 1M, batch 2048, gamma 0.95, lr 1e-3, tau 0.05,
-  net `[512, 512, 512]`, 2 critics, 1M steps, no observation normalization.
+  net `[512, 512, 512]`, 2 critics, 2M steps in total, no observation normalization.
 * Versions: rl_zoo3 2.9.2, sb3-contrib 2.9.2, stable-baselines3 2.9.2, panda-gym 3.0.7, gymnasium 1.0.0.
 * Code, config and the Colab notebook: [{github}/tree/main/units/unit6-a2c-robotics]({github}/tree/main/units/unit6-a2c-robotics).
 
@@ -85,7 +88,7 @@ CARDS = {
         extra_tags=["her", "tqc", "panda-gym"],
         model_name="TQC",
         env="PandaPickAndPlace-v3",
-        metrics=[("mean_reward", "-34.08 +/- 21.30"), ("success_rate", "36.00")],
+        metrics=[("mean_reward", "-30.86 +/- 21.70"), ("success_rate", "44.20")],  # 500 episodes, 2M steps
         files={"eval_curve.png": ROOT / "assets/plots/tqc_eval_curve.png",
                "replay.gif": ROOT / "assets/gifs/tqc-PandaPickAndPlace-v3.gif"},
     ),
@@ -97,17 +100,20 @@ def split_card(text):
     return (yaml.safe_load(m.group(1)), m.group(2)) if m else ({}, text)
 
 
-def build(repo_id, spec, old_text):
-    meta, _ = split_card(old_text)
-    meta["tags"] = list(dict.fromkeys(list(meta.get("tags", [])) + spec["extra_tags"]))
-    meta["model-index"] = [{
-        "name": spec["model_name"],
-        "results": [{
-            "task": {"type": "reinforcement-learning", "name": "reinforcement-learning"},
-            "dataset": {"name": spec["env"], "type": spec["env"]},
-            "metrics": [{"type": t, "value": v, "name": t, "verified": False} for t, v in spec["metrics"]],
+def build(repo_id, spec, old_text=None):
+    """Card from scratch: nothing is carried over from the card currently on the Hub."""
+    meta = {
+        "library_name": "stable-baselines3",
+        "tags": [spec["env"], "deep-reinforcement-learning", "reinforcement-learning", "stable-baselines3"] + spec["extra_tags"],
+        "model-index": [{
+            "name": spec["model_name"],
+            "results": [{
+                "task": {"type": "reinforcement-learning", "name": "reinforcement-learning"},
+                "dataset": {"name": spec["env"], "type": spec["env"]},
+                "metrics": [{"type": t, "value": v, "name": t, "verified": False} for t, v in spec["metrics"]],
+            }],
         }],
-    }]
+    }
     front = yaml.safe_dump(meta, sort_keys=False, default_flow_style=False).strip()
     return f"---\n{front}\n---\n{spec['body']}"
 
