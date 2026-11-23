@@ -38,22 +38,27 @@ It is a "beyond the course" follow-up to Unit 6 of the Hugging Face Deep RL Cour
 
 ## Results
 
-Deterministic actions, evaluation seed fixed, seed 0 for training. Success is `info["is_success"]` on the last step of the episode.
+Deterministic actions, fixed evaluation seed, training seed 0. Success is `info["is_success"]` on the last step of the episode.
 The published model is the run after **2,000,000 training steps** (resumed from checkpoints after disconnects), evaluated on **500 episodes**:
-**44.2% success, mean reward -30.86 +/- 21.70** (95% interval on the success rate about +/- 4.4 points).
+**44.2% success, mean reward -30.86 +/- 21.70, mean episode length 31.3** (95% interval on the success rate about +/- 4.4 points).
 
-| agent | steps | evaluation episodes | success rate | mean reward +/- std |
-|---|---|---|---|---|
-| [A2C (Unit 6)](https://huggingface.co/elliemci/a2c-PandaPickAndPlace-v3) | ~1M | 100 | 5% | -47.69 +/- 10.21 |
-| TQC + HER (earlier checkpoint of this run) | 1M | 100 | 36% | -34.08 +/- 21.30 |
-| **TQC + HER (this model)** | **2M** | **500** | **44.2%** | **-30.86 +/- 21.70** |
+| agent | steps | evaluation episodes | success rate | mean reward +/- std | mean episode length |
+|---|---|---|---|---|---|
+| [A2C (Unit 6)](https://huggingface.co/elliemci/a2c-PandaPickAndPlace-v3) | ~1M | 100 | 3% | -48.50 +/- 8.53 | 48.5 |
+| TQC + HER (this model) | 2M | 100 | 45% | -30.41 +/- 21.89 | 30.9 |
+| TQC + HER (earlier checkpoint of this run) | 1M | 500 | 37.8% | -34.06 +/- 20.68 | 34.4 |
+| **TQC + HER (this model)** | **2M** | **500** | **44.2%** | **-30.86 +/- 21.70** | 31.3 |
 
-The rows use different numbers of evaluation episodes, so compare them loosely. The A2C 5% is probably episodes where the target spawns next to the cube (not verified).
+Compare A2C and TQC on the two 100-episode rows (there is no 500-episode A2C evaluation), and 1M vs 2M on the two 500-episode rows.
+From 1M to 2M the gain is about 6 points, with an interval of similar size: "slightly better" is what the data supports. One training seed only.
 `results.json` in this repo is the 10-episode check that `package_to_hub` runs when uploading, not these numbers.
 
-![evaluation success during the first 1M steps](eval_curve.png)
+![evaluation success during training](eval_curve.png)
 
-Success rate over 20 evaluation episodes every 50k steps during the first 1M steps (noisy). The last two points (950k, 1M) come from a resumed run. The 1M to 2M part is not plotted.
+Success rate over 20 evaluation episodes every 50k steps. The run was resumed at 0.9M, 1.0M and 1.8M (dotted lines); the 1.85M point is taken from the resumed run.
+Averages per half-million steps: 17.5%, 36.5%, 41.5%, 54%. Individual points are very noisy, and the 500-episode evaluation at 2M (44.2%) is below the 54% average
+of the last half-million of training evaluations; I have not investigated why.
+The raw data and the plotting script are in the [GitHub repo]({github}/tree/main/units/unit6-a2c-robotics/results).
 
 ## Training
 
