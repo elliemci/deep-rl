@@ -50,3 +50,4 @@ tqc_her_runs/
 rl_model_*
 replay_buffer*
 offsets.json
+!units/unit6-a2c-robotics/results/offsets.json
