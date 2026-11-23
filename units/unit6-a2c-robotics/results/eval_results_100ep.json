@@ -1,0 +1,18 @@
+{
+ "a2c": {
+  "success_rate": 0.03,
+  "mean_reward": -48.5,
+  "std_reward": 8.52936105461599,
+  "mean_ep_len": 48.53,
+  "n_episodes": 100
+ },
+ "tqc_her": {
+  "success_rate": 0.45,
+  "mean_reward": -30.41,
+  "std_reward": 21.891594277256285,
+  "mean_ep_len": 30.86,
+  "n_episodes": 100
+ },
+ "n_timesteps": 2000000,
+ "seed": 0
+}

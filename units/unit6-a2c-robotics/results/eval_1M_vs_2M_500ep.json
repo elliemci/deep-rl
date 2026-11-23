@@ -1,0 +1,16 @@
+{
+ "1M": {
+  "success_rate": 0.378,
+  "mean_reward": -34.06,
+  "std_reward": 20.680048355842885,
+  "mean_ep_len": 34.438,
+  "n_episodes": 500
+ },
+ "2M": {
+  "success_rate": 0.442,
+  "mean_reward": -30.86,
+  "std_reward": 21.696737081874776,
+  "mean_ep_len": 31.302,
+  "n_episodes": 500
+ }
+}

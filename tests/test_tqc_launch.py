@@ -119,3 +119,18 @@ def test_nothing_to_resume(tmp_path):
     import pytest
     with pytest.raises(SystemExit):
         tl.plan_resume(tmp_path, 100)
+
+
+def test_eval_curve_rebuilt_from_committed_results():
+    """results/ must reproduce the learning curve: 40 points 50k..2M, the duplicated 1.85M point taken from run 4."""
+    import pytest
+    pytest.importorskip("numpy")
+    spec2 = importlib.util.spec_from_file_location("plot_tqc_curve", ROOT / "units/unit6-a2c-robotics/plot_tqc_curve.py")
+    pc = importlib.util.module_from_spec(spec2)
+    spec2.loader.exec_module(pc)
+    c = pc.load_curve(ROOT / "units/unit6-a2c-robotics/results")
+    assert c["steps"] == list(range(50_000, 2_000_001, 50_000))
+    i = c["steps"].index(1_850_000)
+    assert c["run"][i] == 4 and c["success_pct"][i] == 70.0
+    assert [(g, round(v), r) for g, v, r in c["superseded"]] == [(1_850_000, 50, 3)]
+    assert c["starts"] == {1: 0, 2: 900_000, 3: 1_000_000, 4: 1_800_000}
